@@ -6,7 +6,12 @@ import { OptimismGoerli } from "@thirdweb-dev/chains";
 import { ethers } from "ethers";
 import { getAckNFTsForAddress, resolveAdddress, resolveENS } from '../../../api';
 import constants from '../../../constants';
+import { Configuration, OpenAIApi } from 'openai';
 
+const configuration = new Configuration({
+  apiKey: process.env.NEXT_PUBLIC_OPEN_AI_KEY,
+});
+const openai = new OpenAIApi(configuration);
 const {
     profile, abi, contract, nets, testimonials
 } = constants
@@ -29,6 +34,8 @@ export default function Page() {
     // Profile
     const [profileAddress, setProfileAddress] = useState()
     const [profileENS, setProfileENS] = useState()
+    const [profileDescription, setProfileDescription] = useState()
+    const [profileTraits, setProfileTraits] = useState([])
 
     const loadItems = async (address) => {
         const items = await getAckNFTsForAddress(address)
@@ -70,6 +77,47 @@ export default function Page() {
         }
     }, [profileAddress])
 
+    const generateProfile = async () => {
+      // console.log(OpenAIApi)
+        const text = listItems.map((item) => item.external_data.description).flat()
+        const keys = listItems.map((item) => item.external_data.attributes.map((attr) => attr.value)).flat()
+        const prompt = `
+          ${text}
+          ${keys}
+        `
+        if (!prompt) return
+        // console.log(prompt)
+        const r = await openai.createChatCompletion({
+            model: "gpt-4",
+            messages:[
+              {
+                role: 'system',
+                content: `Generate a 1 liner personal, friendly third person summaryfor ${profileENS || profileAddress } based on the next 
+                          text as a sumarized version of the feedback provided to the person.
+                          write up to 3 words or 
+                          adjectives that describe the best qualities comma separated prefixed by -`
+              },
+              {
+                role: 'user',
+                content: prompt
+              }
+            ]
+          })
+          const t = r.data.choices[0].message.content
+          const items = t.split('-')
+          console.log(t)
+          setProfileDescription(items[0])
+          setProfileTraits(items[1]?.split(','))
+
+    }
+  
+
+    useEffect(() => {
+      if (listItems) {
+        generateProfile()
+      }
+    }, [listItems])
+
     const generateCards = () => {
         // console.log(listItems)
     return listItems.map((item) => {
@@ -105,10 +153,6 @@ export default function Page() {
             </div>
         )
     })
-    }
-
-    function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     const send = async (tcon) => {
@@ -275,11 +319,13 @@ onChange={(e) => setValues(e.target.value)}></input>
     setOpen(!open)
     }
 
+ 
+  
     return (
     <div>
 
 
-<section class="bg-profile-bg bg-cover">
+<section class="bg-profile-bg bg-cover min-h-screen">
 
     <div class="container px-6 py-12 mx-auto">
 
@@ -287,13 +333,16 @@ onChange={(e) => setValues(e.target.value)}></input>
         <div class="max-w-3xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
         
             <div class="flex items-center space-x-4">
+        { (profileENS || profileAddress) && (
         <img class="w-36 h-36 rounded-full" src={`https://effigy.im/a/${profileENS || profileAddress}.png`} alt=""/>
+        )}
         <div class="font-medium dark:text-white">
             <h2 class="text-4xl font-bold">{ profileENS || profileAddress }</h2>
-            <p class="mt-1 text-gray-300 text-md">Pri ex magna scaevola moderatius.d askdjla kjdlasjdl ajsla jlasj kajslkasjdl ajsl asdkaslkdjklasjdlakdlkasjldjas asdjlas</p>
+            <p class="mt-1 text-gray-300 text-md">{ profileDescription }</p>
 
             <div class="block mt-4">
-                    { profile.traits.map((trait) => {
+                    { profileTraits?.map((trait) => {
+                      console.log(profileTraits)
                         return (
                             <div class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
                                 <div class="mt-px text-center">{trait}</div>

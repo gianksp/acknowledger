@@ -15,6 +15,7 @@
     "@thirdweb-dev/sdk": "^3",
     "axios": "^1.4.0",
     "next": "^13",
+    "openai": "^3.3.0",
     "react": "^18.2",
     "react-dom": "^18.2"
   },
