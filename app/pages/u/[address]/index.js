@@ -83,7 +83,7 @@ export default function Page() {
             <div class="bg-opacity-30 backdrop-blur-lg break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white">
                 <p class="text-gray-800">{metadata?.description}</p>
                 <div class="flex items-center mt-4 space-x-4">
-                    <img src={metadata?.image} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
+                    <img src={`https://effigy.im/a/${who}.png`} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                     <div>
                         <p class="text-lg font-semibold text-gray-900">{who}</p>
                         <p class="text-sm text-gray-700">{rel}</p>
@@ -277,7 +277,7 @@ onChange={(e) => setValues(e.target.value)}></input>
         <div class="max-w-3xl mx-auto my-8 space-y-4 text-center xl:col-span-2 xl:text-left">
         
             <div class="flex items-center space-x-4">
-        <img class="w-36 h-36 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt=""/>
+        <img class="w-36 h-36 rounded-full" src={`https://effigy.im/a/${profileENS || profileAddress}.png`} alt=""/>
         <div class="font-medium dark:text-white">
             <h2 class="text-4xl font-bold">{ profileENS || profileAddress }</h2>
             <p class="mt-1 text-gray-300 text-md">Pri ex magna scaevola moderatius.d askdjla kjdlasjdl ajsla jlasj kajslkasjdl ajsl asdkaslkdjklasjdlakdlkasjldjas asdjlas</p>

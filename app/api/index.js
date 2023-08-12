@@ -45,8 +45,9 @@ export const getAckNFTsForAddress = async (address) => {
  * @returns 
  */
 export const resolveENS = async(domain) => {
+    console.log(domain)
     let data = JSON.stringify({
-        "query": `{ domains(where: { labelName: "${domain.toLowerCase()}"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
+        "query": `{ domains(where: { name: "${domain.toLowerCase()}"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
         "variables": null
     })
     console.log(data)
@@ -61,6 +62,7 @@ export const resolveENS = async(domain) => {
     }
       
     const response = await axios.request(config)
+    console.log(response)
     const ens = response?.data?.data?.domains?.find((item) => item.labelName !== null)?.owner?.id
 
     return ens
@@ -81,7 +83,7 @@ export const resolveAdddress = async(address) => {
         "query": `{ domains(where: { owner: \"${address.toLowerCase()}\"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
         "variables": null
     })
-
+    console.log(data)
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
