@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        "profile-bg": "url(https://i.pinimg.com/originals/39/b9/7b/39b97b1d11930d854f5668f3047e5105.png)"
+        "profile-bg": "url(https://ostcm.wpenginepowered.com/wp-content/uploads/2019/04/testimonials.jpeg)",
+        "img-bg": "url(https://ipfs.moralis.io:2053/ipfs/QmYiW2yBda962dEo3VPUBmBnM3cDQNUteUup7iUF67q7Gg/BannerAckowledger (3).jpg)"
       }
     },
   },

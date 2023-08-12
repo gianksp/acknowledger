@@ -133,12 +133,12 @@ export default function Page() {
             }}
                   class="cursor-pointer bg-opacity-30 hover:bg-opacity-40 backdrop-blur-lg hover:backdrop-blur-5xl break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white relative">
 
-                <p class="text-gray-800 break-words">{metadata?.description}</p>
+                <p class="text-gray-100 break-words">{metadata?.description}</p>
                 <div class="flex items-center mt-4 space-x-4">
-                    <img src={`https://effigy.im/a/${who}.png`} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
+                    <img src={`https://effigy.im/a/${who}.png`} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-100" />
                     <div>
-                        <p class="text-lg font-semibold text-gray-900">{who}</p>
-                        <p class="text-sm text-gray-700">{rel}</p>
+                        <p class="text-lg font-semibold text-white">{who}</p>
+                        <p class="text-sm text-white">{rel}</p>
                     </div>
                 </div>
                 <div class="block mt-4">
