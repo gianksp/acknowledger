@@ -4,7 +4,114 @@ export default {
     profile: {
         traits: ['DiveDeep', 'Insist on Highest Standards', 'Disagree and Commit']
     },
-    abi: [
+
+contract: {
+    420: '0x9bC45aA16C3c5A0A817b036F973d0742483492E8', // Optimism Goerli
+    512: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Zora Testnet
+    84531: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Base Goerli
+},
+
+explore: {
+    '0x9bC45aA16C3c5A0A817b036F973d0742483492E8': 'https://testnets.opensea.io/assets/optimism-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/', // Optimism Goerli
+    '0xB15f216D52272e187e4CF6d122d088976c236A3f': 'https://testnet.zora.co/collect/ogor:0x9bc45aa16c3c5a0a817b036f973d0742483492e8/', // Zora Testnet
+    '0xB15f216D52272e187e4CF6d122d088976c236A3f': 'https://testnets.opensea.io/assets/base-goerli/0xB15f216D52272e187e4CF6d122d088976c236A3f/', // Base Goerli
+},
+
+nets: [
+    {
+        id: 'Optimism',
+        text: 'Basic',
+        image: 'https://tse1.mm.bing.net/th?id=OIP.avnBtfI0O34yYRGlMz3WRAHaHa&pid=Api&rs=1&c=1&qlt=95&w=48&h=48',
+        network: OptimismGoerli
+    },
+    {
+        id: 'Base',
+        text: 'Coinbase',
+        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Fh5ps8%2Flogo%2F1678294488367_W-9qsu1e_400x400.jpeg',
+        network: BaseGoerli
+    },
+    {
+        id: 'Zora',
+        text: 'Collectibles',
+        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Ff2so0%2Flogo%2F1690573556900_Zorb%20Core%20SVG.svg',
+        network: ZoraTestnet
+        }
+],
+
+testimonials: [
+    {
+        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Respectful', 'Dilligent', 'Brave']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Tehnical', 'Brilliant']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Barraiser', 'DeepDiver']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Fearless', 'Entrepreneurial']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Friendly', 'Competent']
+    },
+    {
+        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Respectful', 'Dilligent', 'Brave']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Tehnical', 'Brilliant']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Barraiser', 'DeepDiver']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Fearless', 'Entrepreneurial']
+    },
+    {
+        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
+        author: 'Leroy Jenkins',
+        community: 'CTO of Company Co.',
+        image: 'https://source.unsplash.com/50x50/?portrait?1',
+        traits: ['Friendly', 'Competent']
+    }
+],
+
+abi: [
     {
         "inputs": [],
         "stateMutability": "nonpayable",
@@ -410,106 +517,7 @@ export default {
         "stateMutability": "nonpayable",
         "type": "function"
     }
-],
-
-contract: {
-    420: '0x9bC45aA16C3c5A0A817b036F973d0742483492E8', // Optimism Goerli
-    512: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Zora Testnet
-    84531: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Base Goerli
-},
-
-nets: [
-    {
-        id: 'Optimism',
-        text: 'Basic',
-        image: 'https://tse1.mm.bing.net/th?id=OIP.avnBtfI0O34yYRGlMz3WRAHaHa&pid=Api&rs=1&c=1&qlt=95&w=48&h=48',
-        network: OptimismGoerli
-    },
-    {
-        id: 'Base',
-        text: 'Coinbase',
-        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Fh5ps8%2Flogo%2F1678294488367_W-9qsu1e_400x400.jpeg',
-        network: BaseGoerli
-    },
-    {
-        id: 'Zora',
-        text: 'Collectibles',
-        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Ff2so0%2Flogo%2F1690573556900_Zorb%20Core%20SVG.svg',
-        network: ZoraTestnet
-        }
-],
-
-testimonials: [
-    {
-        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Respectful', 'Dilligent', 'Brave']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Tehnical', 'Brilliant']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Barraiser', 'DeepDiver']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Fearless', 'Entrepreneurial']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Friendly', 'Competent']
-    },
-    {
-        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Respectful', 'Dilligent', 'Brave']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Tehnical', 'Brilliant']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Barraiser', 'DeepDiver']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Fearless', 'Entrepreneurial']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Friendly', 'Competent']
-    }
 ]
+
 
 }

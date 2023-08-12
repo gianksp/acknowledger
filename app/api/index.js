@@ -24,9 +24,10 @@ export const getAckNFTsForAddress = async (address) => {
     const zoraPromise = axios.get(zora, headers)
     const basePromise = axios.get(base, headers)
     const results = await Promise.all([optPromise, zoraPromise, basePromise])
+    enrichResults(results)
+    // Filter only Ack
     const allowed = [
         "0x9bC45aA16C3c5A0A817b036F973d0742483492E8".toLowerCase(),
-        "0xB15f216D52272e187e4CF6d122d088976c236A3f".toLowerCase(),
         "0xB15f216D52272e187e4CF6d122d088976c236A3f".toLowerCase()
     ]
     const nfts = results.map((result) => result?.data?.data?.items).flat()
@@ -45,12 +46,10 @@ export const getAckNFTsForAddress = async (address) => {
  * @returns 
  */
 export const resolveENS = async(domain) => {
-    console.log(domain)
     let data = JSON.stringify({
         "query": `{ domains(where: { name: "${domain.toLowerCase()}"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
         "variables": null
     })
-    console.log(data)
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -62,7 +61,6 @@ export const resolveENS = async(domain) => {
     }
       
     const response = await axios.request(config)
-    console.log(response)
     const ens = response?.data?.data?.domains?.find((item) => item.labelName !== null)?.owner?.id
 
     return ens
@@ -83,7 +81,6 @@ export const resolveAdddress = async(address) => {
         "query": `{ domains(where: { owner: \"${address.toLowerCase()}\"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
         "variables": null
     })
-    console.log(data)
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -93,9 +90,24 @@ export const resolveAdddress = async(address) => {
         },
         data : data
     }
-      
     const response = await axios.request(config)
     const domain = response?.data?.data?.domains?.find((item) => item.labelName !== null)?.name
-
     return domain
+}
+
+const enrichResults = (results) => {
+    // Inject contract address and external_url data to each individual child item
+    results.forEach((result, index) => {
+        const items = result.data.data.items
+        const baseUri = index === 0 ? 'https://testnets.opensea.io/assets/optimism-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/' :
+                        index === 1 ? 'https://testnet.zora.co/collect/ogor:0x9bc45aa16c3c5a0a817b036f973d0742483492e8/' :
+                        'https://testnets.opensea.io/assets/base-goerli/0xB15f216D52272e187e4CF6d122d088976c236A3f/'
+        items.forEach((item) => {
+            const contractAddress = item.contract_address
+            item.nft_data.forEach((nft) => {
+                nft.contract_address = contractAddress
+                nft.uri = `${baseUri}${nft.token_id}`
+            })
+        })
+    })
 }

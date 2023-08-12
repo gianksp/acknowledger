@@ -77,11 +77,15 @@ export default function Page() {
         const who = metadata?.attributes?.find((attr) => attr.trait_type === 'Author')?.value
         const rel = metadata?.attributes?.find((attr) => attr.trait_type === 'Relation')?.value
         const vals = metadata?.attributes?.find((attr) => attr.trait_type === 'Values')?.value?.split(',')
-        console.log(metadata)
-        console.log(who)
+        // console.log(metadata)
+        // console.log(who)
         return (
-            <div class="bg-opacity-30 backdrop-blur-lg break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white">
-                <p class="text-gray-800">{metadata?.description}</p>
+            <div  onClick={() => {
+              window.open(item.uri, '_blank').focus();
+            }}
+                  class="cursor-pointer bg-opacity-30 hover:bg-opacity-40 backdrop-blur-lg hover:backdrop-blur-5xl break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white relative">
+
+                <p class="text-gray-800 break-words">{metadata?.description}</p>
                 <div class="flex items-center mt-4 space-x-4">
                     <img src={`https://effigy.im/a/${who}.png`} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                     <div>
@@ -108,10 +112,16 @@ export default function Page() {
     }
 
     const send = async (tcon) => {
+      // console.log(selectedChain)
+
+      // return
     try {
+
+        const authorENS = await resolveAdddress(tcon.contractWrapper.signer._address)
         const image = 'https://bafybeid54bv7vocsui5lohkfdkswgxn4trf5slzlp6uhj73n2ret4ray44.ipfs.w3s.link/Untitled.png'
-        const author = '0xasdlasdasdas'
+        const author = authorENS || tcon.contractWrapper.signer._address
         const name = `Acknowledged by ${author}`
+        // const external_url = 
         setLoading(true)
         // First generate metadata file
         const attributes = [
@@ -132,7 +142,7 @@ export default function Page() {
             description,
             image,
             name,
-            attributes
+            attributes,
         }
         const urlMetadata = await storage.upload(metadata)
         console.log(urlMetadata)
@@ -237,7 +247,7 @@ onChange={(e) => setValues(e.target.value)}></input>
                 contractAbi={abi}
                 action={send}
                     >
-                <div class="flex items-center gap-2 text-white">
+                <div class="flex items-center gap-2 text-gray-800">
                 { isLoading && spinner }
                 Send Acknowledgement
                 </div>
