@@ -1,6 +1,17 @@
 import axios from 'axios'
 
-export const getAckNFTsForAddress = async (address='0x06bd1006C1ACd8f32ab9599B5608f789Cb22A4F7') => {
+/**
+ * getAckNFTsForAddress
+ * 
+ * Get list of soulbound collectibles with the testimonial data.
+ * For this we use Covalent API and query all 3 Testnets simultaneously
+ * Optimism, Base and Zora and filter by our own contracts returning all the
+ * tokens found to be listed and rendered.
+ * 
+ * @param {*} address 
+ * @returns 
+ */
+export const getAckNFTsForAddress = async (address) => {
     const optimism = `https://api.covalenthq.com/v1/optimism-goerli/address/${address}/balances_nft/?with-uncached=true`
     const zora =  `https://api.covalenthq.com/v1/zora-testnet/address/${address}/balances_nft/?with-uncached=true`
     const base = `https://api.covalenthq.com/v1/base-testnet/address/${address}/balances_nft/?with-uncached=true`
@@ -18,9 +29,21 @@ export const getAckNFTsForAddress = async (address='0x06bd1006C1ACd8f32ab9599B56
         "0xB15f216D52272e187e4CF6d122d088976c236A3f".toLowerCase(),
         "0xB15f216D52272e187e4CF6d122d088976c236A3f".toLowerCase()
     ]
-    return results.map((result) => result?.data?.data?.items).flat().filter((item) => allowed.includes(item.contract_address))
+    const nfts = results.map((result) => result?.data?.data?.items).flat()
+    const list = nfts.filter((item) => allowed.includes(item.contract_address))
+    return list.map((item) => item.nft_data).flat()
 }
 
+/**
+ * resolveENS
+ * 
+ * Given an ENS domain e.g gianksp.eth resolve to the 0x address
+ * using the ENS subgraph from TheGraph
+ * https://thegraph.com/hosted-service/subgraph/ensdomains/ens
+ * 
+ * @param {*} domain 
+ * @returns 
+ */
 export const resolveENS = async(domain) => {
     let data = JSON.stringify({
         "query": `{ domains(where: { labelName: "${domain.toLowerCase()}"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,
@@ -38,12 +61,21 @@ export const resolveENS = async(domain) => {
     }
       
     const response = await axios.request(config)
-    console.log(response)
     const ens = response?.data?.data?.domains?.find((item) => item.labelName !== null)?.owner?.id
 
     return ens
 }
 
+/**
+ * resolveAdddress
+ * 
+ * Given a 0x address check if they own an ENS domain
+ * using the ENS subgraph from TheGraph
+ * https://thegraph.com/hosted-service/subgraph/ensdomains/ens
+ * 
+ * @param {*} address 
+ * @returns 
+ */
 export const resolveAdddress = async(address) => {
     let data = JSON.stringify({
         "query": `{ domains(where: { owner: \"${address.toLowerCase()}\"}) { \n id name \n labelName \n labelhash \n owner { \n id \n } \n } }`,

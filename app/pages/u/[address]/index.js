@@ -2,521 +2,14 @@ import { useState, useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Web3Button, useStorage } from "@thirdweb-dev/react"
 import ChainContext from '../../../context/chain';
-import { ZoraTestnet, OptimismGoerli, BaseGoerli } from "@thirdweb-dev/chains";
+import { OptimismGoerli } from "@thirdweb-dev/chains";
 import { ethers } from "ethers";
 import { getAckNFTsForAddress, resolveAdddress, resolveENS } from '../../../api';
+import constants from '../../../constants';
 
-const profile = {
-    traits: ['DiveDeep', 'Insist on Highest Standards', 'Disagree and Commit']
-}
-
-const abi = [
-    {
-        "inputs": [],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "approved",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "Approval",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "operator",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "bool",
-                "name": "approved",
-                "type": "bool"
-            }
-        ],
-        "name": "ApprovalForAll",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "previousOwner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "OwnershipTransferred",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "Transfer",
-        "type": "event"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "approve",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "getApproved",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "owner",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "operator",
-                "type": "address"
-            }
-        ],
-        "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "name",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "ownerOf",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "string",
-                "name": "uri",
-                "type": "string"
-            }
-        ],
-        "name": "safeMint",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-            }
-        ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "operator",
-                "type": "address"
-            },
-            {
-                "internalType": "bool",
-                "name": "approved",
-                "type": "bool"
-            }
-        ],
-        "name": "setApprovalForAll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes4",
-                "name": "interfaceId",
-                "type": "bytes4"
-            }
-        ],
-        "name": "supportsInterface",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "tokenURI",
-        "outputs": [
-            {
-                "internalType": "string",
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            }
-        ],
-        "name": "transferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "newOwner",
-                "type": "address"
-            }
-        ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-]
-
-const contract = {
-    420: '0x9bC45aA16C3c5A0A817b036F973d0742483492E8', // Optimism Goerli
-    512: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Zora Testnet
-    84531: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Base Goerli
-}
-
-const nets = [
-    {
-        id: 'Optimism',
-        text: 'Basic',
-        image: 'https://tse1.mm.bing.net/th?id=OIP.avnBtfI0O34yYRGlMz3WRAHaHa&pid=Api&rs=1&c=1&qlt=95&w=48&h=48',
-        network: OptimismGoerli
-    },
-    {
-        id: 'Base',
-        text: 'Coinbase',
-        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Fh5ps8%2Flogo%2F1678294488367_W-9qsu1e_400x400.jpeg',
-        network: BaseGoerli
-    },
-    {
-        id: 'Zora',
-        text: 'Collectibles',
-        image: 'https://storage.googleapis.com/ethglobal-api-production/organizations%2Ff2so0%2Flogo%2F1690573556900_Zorb%20Core%20SVG.svg',
-        network: ZoraTestnet
-        }
-]
-
-const testimonials = [
-    {
-        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Respectful', 'Dilligent', 'Brave']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Tehnical', 'Brilliant']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Barraiser', 'DeepDiver']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Fearless', 'Entrepreneurial']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Friendly', 'Competent']
-    },
-    {
-        text: ' democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo pereum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Respectful', 'Dilligent', 'Brave']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit rAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democepudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Tehnical', 'Brilliant']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Barraiser', 'DeepDiver']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democAn audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritum pro in, nec democritum intellegam ne. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Fearless', 'Entrepreneurial']
-    },
-    {
-        text: 'An audire commodo habemus cum. Ne sed corrumpit repudiandae. Tota aliquip democritune. Propriae volutpat dissentiet ea sit, nec at lorem inani tritani, an ius populo perfecto vituperatoribus. Eu cum case modus salutandi, ut eum vocent sensibus reprehendunt.',
-        author: 'Leroy Jenkins',
-        community: 'CTO of Company Co.',
-        image: 'https://source.unsplash.com/50x50/?portrait?1',
-        traits: ['Friendly', 'Competent']
-    }
-]
+const {
+    profile, abi, contract, nets, testimonials
+} = constants
 
 export default function Page() {
     const storage = useStorage();
@@ -537,8 +30,8 @@ export default function Page() {
     const [profileAddress, setProfileAddress] = useState()
     const [profileENS, setProfileENS] = useState()
 
-    const loadItems = async () => {
-        const items = await getAckNFTsForAddress()
+    const loadItems = async (address) => {
+        const items = await getAckNFTsForAddress(address)
         setListItems(items)
     }
 
@@ -571,29 +64,36 @@ export default function Page() {
         loadProfile(router.query.address)
     }, [router])
 
-    // useEffect(() => {
-    //     if (target) {
-    //         loadProfile()
-    //     }
-    // }, [target])
+    useEffect(() => {
+        if (profileAddress) {
+            loadItems(profileAddress)
+        }
+    }, [profileAddress])
 
     const generateCards = () => {
-    return testimonials.map((item) => {
+        // console.log(listItems)
+    return listItems.map((item) => {
+        const metadata = item.external_data
+        const who = metadata?.attributes?.find((attr) => attr.trait_type === 'Author')?.value
+        const rel = metadata?.attributes?.find((attr) => attr.trait_type === 'Relation')?.value
+        const vals = metadata?.attributes?.find((attr) => attr.trait_type === 'Values')?.value?.split(',')
+        console.log(metadata)
+        console.log(who)
         return (
             <div class="bg-opacity-30 backdrop-blur-lg break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white">
-                <p class="text-gray-800">{item.text}</p>
+                <p class="text-gray-800">{metadata?.description}</p>
                 <div class="flex items-center mt-4 space-x-4">
-                    <img src={item.image} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
+                    <img src={metadata?.image} alt="" class="w-12 h-12 bg-center bg-cover rounded-full dark:bg-gray-500" />
                     <div>
-                        <p class="text-lg font-semibold text-gray-900">{item.author}</p>
-                        <p class="text-sm text-gray-700">{item.community}</p>
+                        <p class="text-lg font-semibold text-gray-900">{who}</p>
+                        <p class="text-sm text-gray-700">{rel}</p>
                     </div>
                 </div>
                 <div class="block mt-4">
-                    { item.traits.map((trait) => {
+                    { vals?.map((attr) => {
                         return (
                             <div class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
-                                <div class="mt-px text-center">{trait}</div>
+                                <div class="mt-px text-center">{attr}</div>
                             </div>
                         )
                     })}
@@ -614,19 +114,32 @@ export default function Page() {
         const name = `Acknowledged by ${author}`
         setLoading(true)
         // First generate metadata file
+        const attributes = [
+            { 
+                trait_type: 'Author',
+                value: author
+            },
+            { 
+                trait_type: 'Relation',
+                value: relation
+            },
+            { 
+                trait_type: 'Values',
+                value: values
+            }
+        ]
         const metadata = {
             description,
             image,
             name,
-            values,
-            author,
-            relation
+            attributes
         }
         const urlMetadata = await storage.upload(metadata)
         console.log(urlMetadata)
+        console.log(profileAddress)
         // Mint NFT
         const sbt = new ethers.Contract(contract[tcon._chainId], abi, tcon.contractWrapper.provider);
-        const tx = await sbt.connect(tcon.contractWrapper.signer).safeMint(target, urlMetadata)
+        const tx = await sbt.connect(tcon.contractWrapper.signer).safeMint(profileAddress, urlMetadata)
         console.log(tx)
         setOpen(false)
     } catch (e) {
@@ -812,206 +325,8 @@ onChange={(e) => setValues(e.target.value)}></input>
 
 
 
-{ open && modal }
+        { open && modal }
 
-
-
-
-
-
-
-{/* 
-<div class="bg-white p-24 bg-opacity-30 backdrop-blur-lg">
-
-
-
-
-
-                    <form>
-    <div class="space-y-12">
-    <div class="border-b border-gray-900/10 pb-12">
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Profile</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
-
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div class="sm:col-span-4">
-            <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Username</label>
-            <div class="mt-2">
-            <div class="bg-white flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">workcation.com/</span>
-                <input type="text" name="username" id="username" autocomplete="username" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="janesmith" />
-            </div>
-            </div>
-        </div>
-
-        <div class="col-span-full">
-            <label for="about" class="block text-sm font-medium leading-6 text-gray-900">About</label>
-            <div class="mt-2">
-            <textarea id="about" name="about" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-            </div>
-            <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
-        </div>
-
-        <div class="col-span-full">
-            <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo</label>
-            <div class="mt-2 flex items-center gap-x-3">
-            <svg class="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
-            </svg>
-            <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
-            </div>
-        </div>
-
-        <div class="col-span-full">
-            <label for="cover-photo" class="block text-sm font-medium leading-6 text-gray-900">Cover photo</label>
-            <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-            <div class="text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
-                </svg>
-                <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                    <span>Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" class="sr-only" />
-                </label>
-                <p class="pl-1">or drag and drop</p>
-                </div>
-                <p class="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-
-    <div class="border-b border-gray-900/10 pb-12">
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div class="sm:col-span-3">
-            <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
-            <div class="mt-2">
-            <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-        <div class="sm:col-span-3">
-            <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-            <div class="mt-2">
-            <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-        <div class="sm:col-span-4">
-            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-            <div class="mt-2">
-            <input id="email" name="email" type="email" autocomplete="email" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-    
-
-        <div class="col-span-full">
-            <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
-            <div class="mt-2">
-            <input type="text" name="street-address" id="street-address" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-        <div class="sm:col-span-2 sm:col-start-1">
-            <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
-            <div class="mt-2">
-            <input type="text" name="city" id="city" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-        <div class="sm:col-span-2">
-            <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
-            <div class="mt-2">
-            <input type="text" name="region" id="region" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-
-        <div class="sm:col-span-2">
-            <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
-            <div class="mt-2">
-            <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-            </div>
-        </div>
-        </div>
-    </div>
-
-    <div class="border-b border-gray-900/10 pb-12">
-        <h2 class="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-600">We'll always let you know about important changes, but you pick what else you want to hear about.</p>
-
-        <div class="mt-10 space-y-10">
-        <fieldset>
-            <legend class="text-sm font-semibold leading-6 text-gray-900">By Email</legend>
-            <div class="mt-6 space-y-6">
-            <div class="relative flex gap-x-3">
-                <div class="flex h-6 items-center">
-                <input id="comments" name="comments" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                </div>
-                <div class="text-sm leading-6">
-                <label for="comments" class="font-medium text-gray-900">Comments</label>
-                <p class="text-gray-500">Get notified when someones posts a comment on a posting.</p>
-                </div>
-            </div>
-            <div class="relative flex gap-x-3">
-                <div class="flex h-6 items-center">
-                <input id="candidates" name="candidates" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                </div>
-                <div class="text-sm leading-6">
-                <label for="candidates" class="font-medium text-gray-900">Candidates</label>
-                <p class="text-gray-500">Get notified when a candidate applies for a job.</p>
-                </div>
-            </div>
-            <div class="relative flex gap-x-3">
-                <div class="flex h-6 items-center">
-                <input id="offers" name="offers" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                </div>
-                <div class="text-sm leading-6">
-                <label for="offers" class="font-medium text-gray-900">Offers</label>
-                <p class="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p>
-                </div>
-            </div>
-            </div>
-        </fieldset>
-        <fieldset>
-            <legend class="text-sm font-semibold leading-6 text-gray-900">Push Notifications</legend>
-            <p class="mt-1 text-sm leading-6 text-gray-600">These are delivered via SMS to your mobile phone.</p>
-            <div class="mt-6 space-y-6">
-            <div class="flex items-center gap-x-3">
-                <input id="push-everything" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                <label for="push-everything" class="block text-sm font-medium leading-6 text-gray-900">Everything</label>
-            </div>
-            <div class="flex items-center gap-x-3">
-                <input id="push-email" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                <label for="push-email" class="block text-sm font-medium leading-6 text-gray-900">Same as email</label>
-            </div>
-            <div class="flex items-center gap-x-3">
-                <input id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"/>
-                <label for="push-nothing" class="block text-sm font-medium leading-6 text-gray-900">No push notifications</label>
-            </div>
-            </div>
-        </fieldset>
-        </div>
-    </div>
-    </div>
-
-    <div class="mt-6 flex items-center justify-end gap-x-6">
-    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
-    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-    </div>
-</form>
-
-
-
-
-
-</div>
-*/}
 
 
 
