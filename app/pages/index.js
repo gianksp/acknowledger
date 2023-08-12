@@ -64,6 +64,7 @@ export default function Home() {
           <div id="ii8j" class="container mx-auto px-4 flex justify-between items-center">
              <a href="#" class="font-bold text-gray-700"></a><a data-src="" title="" href="https://emojipedia.org/partying-face" id="i3cah" class="Emoji_emoji__P7Lkz __variable_344bdf EmojisList_emojis-list-item__Z9O9D">🥳</a>
              <ul id="irah" class="flex space-x-6 text-white">
+                <li><a href="https://github.com/gianksp/acknowledger" >Github</a></li>
                 <li id="ijtl"><a href="#about" id="ih1ax">Why Acknowledger</a></li>
                 <li id="ikuiz"><a href="#howitworks" id="iekht">How it works</a></li>
                 <li id="i37hy"><a href="#benefits" id="ik9xl">Benefits</a></li>

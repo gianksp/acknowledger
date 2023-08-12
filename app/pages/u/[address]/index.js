@@ -120,7 +120,7 @@ export default function Page() {
 
     const generateCards = () => {
         // console.log(listItems)
-    return listItems.map((item) => {
+    return listItems.map((item, index) => {
         const metadata = item.external_data
         const who = metadata?.attributes?.find((attr) => attr.trait_type === 'Author')?.value
         const rel = metadata?.attributes?.find((attr) => attr.trait_type === 'Relation')?.value
@@ -128,7 +128,7 @@ export default function Page() {
         // console.log(metadata)
         // console.log(who)
         return (
-            <div  onClick={() => {
+            <div  key={index} onClick={() => {
               window.open(item.uri, '_blank').focus();
             }}
                   class="cursor-pointer bg-opacity-30 hover:bg-opacity-40 backdrop-blur-lg hover:backdrop-blur-5xl break-inside-avoid h-min w-full p-6 rounded shadow-md bg-white relative">
@@ -144,7 +144,7 @@ export default function Page() {
                 <div class="block mt-4">
                     { vals?.map((attr) => {
                         return (
-                            <div class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
+                            <div key={attr} class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
                                 <div class="mt-px text-center">{attr}</div>
                             </div>
                         )
@@ -213,7 +213,7 @@ export default function Page() {
                     'mx-1 basis-1/3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer bg-blue-100' :
                     'mx-1 basis-1/3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-blue-100'
                 return (
-                    <div class={renderClasses} onClick={() => {
+                    <div class={renderClasses} key={item.network.chainId} onClick={() => {
                         setSelectedChain(item.network)
                     }}>
                         <div class="flex items-center space-x-4">
@@ -344,7 +344,7 @@ onChange={(e) => setValues(e.target.value)}></input>
                     { profileTraits?.map((trait) => {
                       console.log(profileTraits)
                         return (
-                            <div class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
+                            <div key={trait} class="m-1 text-center center relative inline-block select-none whitespace-nowrap rounded-lg bg-blue-500 py-2 px-3.5 align-baseline font-sans text-xs font-bold uppercase leading-none text-white">
                                 <div class="mt-px text-center">{trait}</div>
                             </div>
                         )
