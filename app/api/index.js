@@ -27,8 +27,9 @@ export const getAckNFTsForAddress = async (address) => {
     enrichResults(results)
     // Filter only Ack
     const allowed = [
-        "0x9bC45aA16C3c5A0A817b036F973d0742483492E8".toLowerCase(),
-        "0xB15f216D52272e187e4CF6d122d088976c236A3f".toLowerCase()
+        "0x540a262220757Fc3AD74263F207B600249527723".toLowerCase(),
+        "0x7c4adAFbf53436BbF41C70a28b0b5800aBc6597F".toLowerCase(),
+        "0x9bC45aA16C3c5A0A817b036F973d0742483492E8".toLowerCase()
     ]
     const nfts = results.map((result) => result?.data?.data?.items).flat()
     const list = nfts.filter((item) => allowed.includes(item.contract_address))
@@ -99,9 +100,9 @@ const enrichResults = (results) => {
     // Inject contract address and external_url data to each individual child item
     results.forEach((result, index) => {
         const items = result.data.data.items
-        const baseUri = index === 0 ? 'https://testnets.opensea.io/assets/optimism-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/' :
-                        index === 1 ? 'https://testnet.zora.co/collect/ogor:0x9bc45aa16c3c5a0a817b036f973d0742483492e8/' :
-                        'https://testnets.opensea.io/assets/base-goerli/0xB15f216D52272e187e4CF6d122d088976c236A3f/'
+        const baseUri = index === 0 ? 'https://testnets.opensea.io/assets/optimism-goerli/0x540a262220757Fc3AD74263F207B600249527723/' :
+                        index === 1 ? 'https://testnet.zora.co/collect/ogor:0x7c4adAFbf53436BbF41C70a28b0b5800aBc6597F/' :
+                        'https://testnets.opensea.io/assets/base-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/'
         items.forEach((item) => {
             const contractAddress = item.contract_address
             item.nft_data.forEach((nft) => {

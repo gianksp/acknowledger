@@ -6,15 +6,15 @@ export default {
     },
 
 contract: {
-    420: '0x9bC45aA16C3c5A0A817b036F973d0742483492E8', // Optimism Goerli
-    512: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Zora Testnet
-    84531: '0xB15f216D52272e187e4CF6d122d088976c236A3f', // Base Goerli
+    420: '0x540a262220757Fc3AD74263F207B600249527723', // Optimism Goerli
+    512: '0x7c4adAFbf53436BbF41C70a28b0b5800aBc6597F', // Zora Testnet
+    84531: '0x9bC45aA16C3c5A0A817b036F973d0742483492E8', // Base Goerli
 },
 
 explore: {
-    '0x9bC45aA16C3c5A0A817b036F973d0742483492E8': 'https://testnets.opensea.io/assets/optimism-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/', // Optimism Goerli
-    '0xB15f216D52272e187e4CF6d122d088976c236A3f': 'https://testnet.zora.co/collect/ogor:0x9bc45aa16c3c5a0a817b036f973d0742483492e8/', // Zora Testnet
-    '0xB15f216D52272e187e4CF6d122d088976c236A3f': 'https://testnets.opensea.io/assets/base-goerli/0xB15f216D52272e187e4CF6d122d088976c236A3f/', // Base Goerli
+    '0x540a262220757Fc3AD74263F207B600249527723': 'https://testnets.opensea.io/assets/optimism-goerli/0x540a262220757Fc3AD74263F207B600249527723/', // Optimism Goerli
+    '0x7c4adAFbf53436BbF41C70a28b0b5800aBc6597F': 'https://testnet.zora.co/collect/ogor:0x7c4adAFbf53436BbF41C70a28b0b5800aBc6597F/', // Zora Testnet
+    '0x9bC45aA16C3c5A0A817b036F973d0742483492E8': 'https://testnets.opensea.io/assets/base-goerli/0x9bC45aA16C3c5A0A817b036F973d0742483492E8/', // Base Goerli
 },
 
 nets: [
