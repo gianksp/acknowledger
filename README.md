@@ -4,7 +4,7 @@
 
 **Acknowledger** is a peer-to-peer recognition platform tailored to community values, culture, and performance. Designed for SuperHack 2023 by Giancarlo.
 
-In essence, is a project that leverage NFTs that people can mint for others. These NFTs generated are soulbound and capture a peace of feedback, kudos, recognition from the sender.
+In essence, is a project that leverage NFTs that people can mint for others. These NFTs generated are soulbound and capture a piece of feedback, kudos, recognition from the sender.
 
 The recipient captures all these testimonials in a public, shareable wall that is timeless since data is fully stored in blockchain.
 
