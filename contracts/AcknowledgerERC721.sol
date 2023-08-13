@@ -14,7 +14,7 @@ contract AcknowledgerERC721 is ERC721, ERC721URIStorage, Ownable {
 
     constructor() ERC721("Acknowledger", "ACK") {}
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(address to, string memory uri) public {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
         _safeMint(to, tokenId);
