@@ -97,7 +97,7 @@ export default function Home() {
           </div>
           <div id="i4tb8" class="container mx-auto px-4">
              <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">More than a Timeless Thank you Note</h2>
-             <video allowfullscreen="allowfullscreen" id="i55llk" class="mx-auto w-full h-auto" src="https://www.shutterstock.com/shutterstock/videos/6606995/preview/stock-footage-earth-from-space-brazil-beautiful-view-of-the-earth-seen-from-space.webm" autoplay="autoplay" controls="controls"></video>
+             <iframe width="560" height="315" class="mx-auto mb-16"  src="https://www.youtube.com/embed/CL6goPA32Ic" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
              <div class="text-2xl font-medium">
                 <h2 id="ifvhi"><br id="ijc1vb" /></h2>
              </div>
